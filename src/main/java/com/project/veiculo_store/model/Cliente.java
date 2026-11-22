@@ -20,6 +20,6 @@ public class Cliente {
     private String  name;
     private String contact;
     private int age;
-    private int cpf;
+    private String cpf;
     private String city;
 }
