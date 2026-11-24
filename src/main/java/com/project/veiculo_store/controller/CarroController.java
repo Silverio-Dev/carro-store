@@ -1,9 +1,11 @@
 package com.project.veiculo_store.controller;
 
+import com.project.veiculo_store.dtos.CarroRequest;
 import com.project.veiculo_store.model.Carro;
 import com.project.veiculo_store.service.CarroService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,8 +46,9 @@ public class CarroController {
     }
 
     @PostMapping
-    public Carro cadastrarCarro(Carro carro) {
-        return carroService.cadastrarCarro(carro);
+    public ResponseEntity<Carro> cadastrarCarro(@RequestBody CarroRequest request) {
+        Carro carro =  carroService.cadastrarCarro(request);
+        return ResponseEntity.ok(carro);
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.project.veiculo_store.service;
 
+import com.project.veiculo_store.dtos.CarroRequest;
 import com.project.veiculo_store.model.Carro;
 import com.project.veiculo_store.repository.CarroRepository;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,14 @@ public class CarroService {
     }
 
 
-    public Carro cadastrarCarro(Carro carro){
+    public Carro cadastrarCarro(CarroRequest request){
+            Carro carro = new Carro();
+            carro.setModel(request.getModel());
+            carro.setBrand(request.getBrand());
+            carro.setSign(request.getSign());
+            carro.setColor(request.getColor());
+            carro.setValue(request.getValue());
+            carro.setYear(request.getYear());
         return carroRepository.save(carro);
     }
 
