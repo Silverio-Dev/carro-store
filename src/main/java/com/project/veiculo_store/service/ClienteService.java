@@ -1,5 +1,6 @@
 package com.project.veiculo_store.service;
 
+import com.project.veiculo_store.dtos.ClienteRequest;
 import com.project.veiculo_store.model.Cliente;
 import com.project.veiculo_store.repository.ClienteRepository;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,13 @@ public class ClienteService {
     }
 
 
-    public Cliente cadastrarCliente(Cliente cliente){
+    public Cliente cadastrarCliente(ClienteRequest request){
+        Cliente cliente = new Cliente();
+        cliente.setName(request.getName());
+        cliente.setCity(request.getCity());
+        cliente.setContact(request.getContact());
+        cliente.setCpf(request.getCpf());
+        cliente.setAge(request.getAge());
         return clienteRepository.save(cliente);
     }
 

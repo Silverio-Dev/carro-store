@@ -1,7 +1,9 @@
 package com.project.veiculo_store.controller;
 
+import com.project.veiculo_store.dtos.ClienteRequest;
 import com.project.veiculo_store.model.Cliente;
 import com.project.veiculo_store.service.ClienteService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +19,28 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> listarCliente() {
-        return clienteService.listarClientes();
+    public ResponseEntity<List<Cliente>> listarCliente() {
+        return ResponseEntity.ok(clienteService.listarClientes());
     }
 
     @PostMapping
-    public Cliente criarCliente(@RequestBody Cliente cliente){
-        return clienteService.cadastrarCliente(cliente);
+    public ResponseEntity<Cliente> criarCliente(@RequestBody ClienteRequest request){
+        Cliente cliente =  clienteService.cadastrarCliente(request);
+        return ResponseEntity.ok(cliente);
     }
 
     @GetMapping("/{id}")
-    public Cliente buscarClientePeloId(@PathVariable Long id){
-        return clienteService.buscarClientePorId(id);
+    public ResponseEntity<Cliente> buscarClientePeloId(@PathVariable Long id){
+        return ResponseEntity.ok(clienteService.buscarClientePorId(id));
     }
 
     @PutMapping("/{id}")
-    public Cliente alterarCliente(@PathVariable Long id, @RequestBody Cliente cliente){
-        return clienteService.alterarCliente(id, cliente);
+    public ResponseEntity<Cliente> alterarCliente(@PathVariable Long id, @RequestBody Cliente cliente){
+        return ResponseEntity.ok(clienteService.alterarCliente(id, cliente));
     }
     @DeleteMapping("/{id}")
-    public void deletarCliente(@PathVariable Long id){
-        Cliente cliente = buscarClientePeloId(id);
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id){
         clienteService.deletarCliente(id);
+        return ResponseEntity.noContent().build();
     }
 }

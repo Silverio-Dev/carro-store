@@ -1,6 +1,7 @@
 package com.project.veiculo_store.controller;
 
 import com.project.veiculo_store.dtos.CarroRequest;
+import com.project.veiculo_store.dtos.DescontoRequest;
 import com.project.veiculo_store.model.Carro;
 import com.project.veiculo_store.service.CarroService;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -21,28 +23,29 @@ public class CarroController {
     }
 
     @GetMapping
-    public List<Carro> listarCarro() {
-        return carroService.listarCarros();
+    public ResponseEntity<List<Carro>> listarCarro() {
+        return ResponseEntity.ok(carroService.listarCarros());
+
     }
 
     @GetMapping("/cor")
-    public List<Carro> buscarCarroPorColor(@RequestParam String color) {
-        return carroService.listarCarroPorColor(color);
+    public ResponseEntity<List<Carro>> buscarCarroPorColor(@RequestParam String color) {
+        return ResponseEntity.ok(carroService.listarCarroPorColor(color));
     }
 
     @GetMapping("/marca")
-    public List<Carro> buscarCarroPorMarca(@RequestParam String brand) {
-        return carroService.buscarCarroPorBrand(brand);
+    public ResponseEntity<List<Carro>> buscarCarroPorMarca(@RequestParam String brand) {
+        return ResponseEntity.ok(carroService.buscarCarroPorBrand(brand));
     }
 
     @GetMapping("/model")
-    public List<Carro> buscarCarroPorModelo(@RequestParam String model) {
-        return carroService.buscarCarroPorModel(model);
+    public ResponseEntity<List<Carro>> buscarCarroPorModelo(@RequestParam String model) {
+        return ResponseEntity.ok(carroService.buscarCarroPorModel(model));
     }
 
     @GetMapping("/disponiveis")
-    public List<Carro> buscarCarrosDisponiveis(boolean disponivel) {
-        return carroService.listarDisponiveis(true);
+    public ResponseEntity<List<Carro>> buscarCarrosDisponiveis(boolean disponivel) {
+        return ResponseEntity.ok(carroService.listarDisponiveis(true));
     }
 
     @PostMapping
@@ -52,13 +55,18 @@ public class CarroController {
     }
 
     @GetMapping("/{id}")
-    public Carro buscarCarroPorId(@PathVariable Long id) {
-        return carroService.buscarCarroPorId(id);
+    public ResponseEntity<Carro> buscarCarroPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(carroService.buscarCarroPorId(id));
     }
 
     @DeleteMapping("/{id}")
-    public void deletarCarro(@PathVariable Long id){
+    public ResponseEntity<Void> deletarCarro(@PathVariable Long id){
         carroService.deletarCarro(id);
+        return ResponseEntity.noContent().build();
+    }
 
+    @PatchMapping("/{id}/desconto")
+    public ResponseEntity<Carro> aplicarDesconto(@PathVariable Long id, @RequestBody DescontoRequest request){
+        return ResponseEntity.ok(carroService.aplicarDesconto(id, request.getPercentual()));
     }
 }

@@ -5,8 +5,10 @@ import com.project.veiculo_store.model.Carro;
 import com.project.veiculo_store.repository.CarroRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -19,44 +21,44 @@ public class CarroService {
     }
 
 
-    public Carro cadastrarCarro(CarroRequest request){
-            Carro carro = new Carro();
-            carro.setModel(request.getModel());
-            carro.setBrand(request.getBrand());
-            carro.setSign(request.getSign());
-            carro.setColor(request.getColor());
-            carro.setValue(request.getValue());
-            carro.setYear(request.getYear());
+    public Carro cadastrarCarro(CarroRequest request) {
+        Carro carro = new Carro();
+        carro.setModel(request.getModel());
+        carro.setBrand(request.getBrand());
+        carro.setSign(request.getSign());
+        carro.setColor(request.getColor());
+        carro.setValue(request.getValue());
+        carro.setYear(request.getYear());
         return carroRepository.save(carro);
     }
 
-    public List<Carro> listarCarros(){
+    public List<Carro> listarCarros() {
         return carroRepository.findAll();
     }
 
-    public Carro buscarCarroPorId(Long id){
+    public Carro buscarCarroPorId(Long id) {
         return (Carro) carroRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Carro não encontrado"));
 
     }
 
-    public List<Carro> buscarCarroPorModel(String model){
+    public List<Carro> buscarCarroPorModel(String model) {
         return carroRepository.findByModel(model);
     }
 
-    public List<Carro> buscarCarroPorBrand(String brand){
+    public List<Carro> buscarCarroPorBrand(String brand) {
         return carroRepository.findByBrand(brand);
     }
 
-    public List<Carro> listarDisponiveis(boolean disponivel){
+    public List<Carro> listarDisponiveis(boolean disponivel) {
         return carroRepository.findByDisponivelTrue(disponivel);
     }
 
-    public List<Carro> listarCarroPorColor(String color){
+    public List<Carro> listarCarroPorColor(String color) {
         return carroRepository.findByColor(color);
     }
 
-    public Carro atualizarCarro(Long id, Carro carro){
+    public Carro atualizarCarro(Long id, Carro carro) {
         Carro carroatualizado = buscarCarroPorId(id);
 
         carroatualizado.setModel(carro.getModel());
@@ -68,11 +70,22 @@ public class CarroService {
         return carroRepository.save(carroatualizado);
     }
 
-    public void deletarCarro(Long id){
+    public void deletarCarro(Long id) {
         Carro carro = buscarCarroPorId(id);
         carroRepository.delete(carro);
     }
 
+
+    public Carro aplicarDesconto(Long id, BigDecimal percentual) {
+        Carro carro = (Carro) carroRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Carro nao encontrado!"));
+        BigDecimal desconto = carro.getValue().
+                multiply(percentual).
+                divide(new BigDecimal("100"));
+        BigDecimal novoPreco = carro.getValue().subtract(desconto);
+        carro.setValue(novoPreco);
+        return carroRepository.save(carro);
+    }
 
 
 }
